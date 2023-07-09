@@ -81,7 +81,7 @@ app.post('/cadastro', async (req, res) => {
 
         res.sendStatus(201);
     } catch (erro) {
-        console.log(erro.message);
+        res.status(500).send(erro);
     }
 })
 
