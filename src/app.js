@@ -2,12 +2,9 @@ import express from "express";
 import cors from "cors";
 import dotenv from 'dotenv';
 import { MongoClient, ObjectId } from 'mongodb';
-import bcrypt from 'bcrypt';
-import { v4 as uuid } from "uuid";
 import Joi from "joi";
-import { createRegistration, signin } from "./controllers/users.js";
-import { historicTransactions, newTransaction } from "./controllers/accounts.js";
-
+import usersRoutes from "./routes/usersRoutes.js";
+import accountRoutes from "./routes/accountsRoutes.js";
 
 //config
 const app = express();
@@ -39,14 +36,7 @@ export const transactionSchema = Joi.object({
     description: Joi.string().required()
 });
 
-
-
-
-app.post('/cadastro',  createRegistration);
-app.post('/', signin);
-app.post('/nova-transacao/:tipo', newTransaction );
-app.get('/home', historicTransactions);
-
-
+app.use(usersRoutes);
+app.use(accountRoutes);
 
 app.listen(port, () => { console.log(`RUNING PORT ${port}`) });
