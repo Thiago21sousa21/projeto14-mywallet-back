@@ -10,10 +10,11 @@ import { createRegistration, signin } from "./controllers/users.js";
 
 //config
 const app = express();
-const port = process.env.PORT;
 app.use(cors());
 app.use(express.json());
 dotenv.config();
+const port = process.env.PORT;
+
 const mongoClient = new MongoClient(process.env.DATABASE_URL);
 try {
     await mongoClient.connect();
