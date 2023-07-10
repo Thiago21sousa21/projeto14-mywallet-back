@@ -5,12 +5,12 @@ import { MongoClient, ObjectId } from 'mongodb';
 import bcrypt from 'bcrypt';
 import { v4 as uuid } from "uuid";
 import Joi from "joi";
-
+import { createRegistration, signin } from "./controllers/users.js";
 
 
 //config
 const app = express();
-const PORT = 5000;
+const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 dotenv.config();
@@ -21,9 +21,7 @@ try {
 } catch (error) {
     console.log(error);
 }
-const db = mongoClient.db();
-
-
+export const db = mongoClient.db();
 
 ///SCHEMAS
 const signupSchema = Joi.object({
@@ -41,80 +39,10 @@ const transactionSchema = Joi.object({
 });
 
 
-app.post('/cadastro', async (req, res) => {
-    console.log(req.body);
-    const {name, email, password} = req.body;
-
-    const validadion = signupSchema.validate(req.body, {abortEarly: false});
-    if(validadion.error){
-        console.log('caiu na no schema')
-        const errors = validadion.error.details.map((detail)=> detail.message)
-        return res.status(422).send(errors);
-    }
-
-    try {
-        const user = await db.collection('users').findOne({email});
-        if(user)return res.status(409).send('Email já cadastrado!');
-
-        const hash =  bcrypt.hashSync(password, 10);
-        console.log(hash);
-        await db.collection('users').insertOne({
-            name,
-            email,
-            password: hash,
-        });
-
-        const recentUser = await db.collection('users').findOne({
-            name,
-            email,
-            password: hash,
-        })
-        console.log('achou o recent ', recentUser)
-        await db.collection('account').insertOne({
-            userId: recentUser._id,
-            balance: 0,
-            transactions: []
-        });
-        console.log('criou a conta ')
-
-        
-
-        res.sendStatus(201);
-    } catch (erro) {
-        res.status(500).send(erro);
-    }
-})
 
 
-app.post('/', async (req, res) => {
-    console.log(req.body);
-    //preciso receber os dados de login que são email e senha
-    const {email, password} = req.body;
-    const validation = siginSchema.validate(req.body, {abortEarly: false});
-    if(validation.error){
-        const errors = validation.error.details.map((detail)=> detail.message)
-        return res.status(422).send(errors)
-    }
-
-    //preciso verificar se existe esse email e  se a senha está correta
-
-    try {
-        const user = await db.collection('users').findOne({email});
-        if(!user )return res.status(404).send('invalid email');
-        if( !bcrypt.compareSync(password, user.password)) return res.status(401).send('invalid password');
-        
-        const token = uuid();
-        await db.collection('sessions').insertOne({
-            token,
-            userId: user._id 
-        })
-
-        res.send({token});
-
-    } catch (erro) {
-        console.log(erro.message);
-    }
-});
+app.post('/cadastro',  createRegistration);
+app.post('/', signin);
 
 
 app.post('/nova-transacao/:tipo', async(req, res)=>{
@@ -213,4 +141,4 @@ app.get('/home', async(req, res)=>{
 
 
 
-app.listen(PORT, () => { console.log(`RUNING PORT ${PORT}`) });
+app.listen(port, () => { console.log(`RUNING PORT ${port}`) });
