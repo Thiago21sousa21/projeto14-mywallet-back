@@ -1,18 +1,10 @@
 import { db } from "../database/databaseConnection.js";
 import bcrypt from 'bcrypt';
 import { v4 as uuid } from "uuid";
-import { siginSchema, signupSchema } from "../schemas/usersSchemas.js";
 
 export async function createRegistration(req, res){
     console.log(req.body);
     const {name, email, password} = req.body;
-
-    const validadion = signupSchema.validate(req.body, {abortEarly: false});
-    if(validadion.error){
-        console.log('caiu na no schema')
-        const errors = validadion.error.details.map((detail)=> detail.message)
-        return res.status(422).send(errors);
-    }
 
     try {
         const user = await db.collection('users').findOne({email});
@@ -49,15 +41,7 @@ export async function createRegistration(req, res){
 
 export async function signin(req, res){
     console.log(req.body);
-    //preciso receber os dados de login que são email e senha
     const {email, password} = req.body;
-    const validation = siginSchema.validate(req.body, {abortEarly: false});
-    if(validation.error){
-        const errors = validation.error.details.map((detail)=> detail.message)
-        return res.status(422).send(errors)
-    }
-
-    //preciso verificar se existe esse email e  se a senha está correta
 
     try {
         const user = await db.collection('users').findOne({email});
