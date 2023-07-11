@@ -1,16 +1,12 @@
-import { db } from "../app.js";
-import { transactionSchema } from "../app.js";
+import { db } from "../database/databaseConnection.js";
+import { transactionSchema } from "../schemas/accountsSchemas.js";
 
 export async function newTransaction(req, res){
     const {tipo} = req.params;
     const {authorization} = req.headers;
     const {value, description} = req.body;
 
-    const validation = transactionSchema.validate(req.body);
-    if(validation.error){
-        const errors = validation.error.details.map(detail=> detail.message);
-        return res.status(422).send(errors);
-    }
+
 
     const token = authorization?.replace('Bearer ','');
     if(!token)return res.status(401).send('usuario não logado')

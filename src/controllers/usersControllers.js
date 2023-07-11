@@ -1,7 +1,7 @@
-import { db } from "../app.js";
+import { db } from "../database/databaseConnection.js";
 import bcrypt from 'bcrypt';
 import { v4 as uuid } from "uuid";
-import { siginSchema, signupSchema } from "../app.js";
+import { siginSchema, signupSchema } from "../schemas/usersSchemas.js";
 
 export async function createRegistration(req, res){
     console.log(req.body);
