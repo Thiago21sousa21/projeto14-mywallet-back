@@ -38,7 +38,7 @@ export async function historicTransactions (req, res){
 
         //console.log('pegando a conta ',account)
         return res.send({
-            balance: account.balance, transactions: account.transactions,
+            balance: account.balance, transactions: account.transactions.reverse(),
             name: user.name
         })
 
