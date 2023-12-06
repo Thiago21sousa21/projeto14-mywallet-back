@@ -6,6 +6,11 @@ async function getUserByEmail(email){
     return user;
 }
 
+async function getUserById(_id){
+    const user = await db.collection('users').findOne({_id});
+    return user;
+}
+
 async function createUser(dataToCreation){
     await db.collection('users').insertOne(dataToCreation);
 }
@@ -26,5 +31,6 @@ export const userRepository = {
     getUserByEmail,
     createUser,
     createUserAccount, 
-    createUserSession
+    createUserSession,
+    getUserById
 }
