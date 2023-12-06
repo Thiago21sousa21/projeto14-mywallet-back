@@ -39,6 +39,6 @@ Rota: GET /home
 Descrição: Retorna todas as transações do usuário com descrição e saldo atual.
 Parâmetros: Nenhum.
 # Deploy
-O MyWallet API está atualmente disponível para acesso via https://projeto14-mywallet-back-gvuz.onrender.com/.
+O MyWallet API está atualmente disponível para acesso via https://projeto14-mywallet-back-gvuz.onrender.com/
 
 Fique à vontade para explorar e utilizar a API para gerenciar seus gastos de forma eficaz!
