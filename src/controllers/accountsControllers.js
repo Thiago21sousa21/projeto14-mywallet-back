@@ -1,16 +1,15 @@
 import { db } from "../database/databaseConnection.js";
 
 export async function newTransaction(req, res){
-    const {tipo} = req.params;
+    const {typeTransaction} = req.params;
     const {value, description} = req.body;
     const {filter} = res.locals
     let newBalance;
     try{
         const account = await db.collection('account').findOne(filter);
-        console.log(account);
-        if(tipo === 'entrada'){
+        if(typeTransaction === 'entrada'){
              newBalance = Number(account.balance) + Number(value);         
-        } else if(tipo === 'saida'){
+        } else if(typeTransaction === 'saida'){
             newBalance = Number(account.balance) - Number(value);   
         }  
             await db.collection('account').updateOne(filter, { 
@@ -20,11 +19,13 @@ export async function newTransaction(req, res){
                         description,
                         value,
                         time: Date.now(),
-                        tipo
+                        typeTransaction
                     }]
                  }})
             return res.send('ok');      
-    }catch(erro){console.log(erro.message)}
+    }catch(erro){
+        console.log(erro.message)
+    }
 }
 
 export async function historicTransactions (req, res){
@@ -34,11 +35,10 @@ export async function historicTransactions (req, res){
 
         const account = await db.collection('account').findOne(filter);
         const user = await db.collection('users').findOne({_id: userOn.userId});
-        console.log('pegando a user ',user)
 
-        //console.log('pegando a conta ',account)
         return res.send({
-            balance: account.balance, transactions: account.transactions.reverse(),
+            balance: account.balance, 
+            transactions: account.transactions.reverse(),
             name: user.name
         })
 
