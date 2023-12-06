@@ -5,7 +5,7 @@ import { validationToken } from "../middlewares/accountMiddlewares/vadidationTok
 
 const accountRoutes = Router();
 
-accountRoutes.post('/nova-transacao/:tipo', validationFormTransaction, validationToken ,newTransaction );
+accountRoutes.post('/nova-transacao/:typeTransaction', validationFormTransaction, validationToken ,newTransaction );
 accountRoutes.get('/home',validationToken, historicTransactions);
 
 export default accountRoutes;
