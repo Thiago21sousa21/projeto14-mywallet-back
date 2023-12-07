@@ -1,4 +1,4 @@
-import { db } from "../database/databaseConnection";
+import { db } from "../database/databaseConnection.js";
 
 async function getAccountUserById (userId){
     return account = await db.collection('account').findOne({userId});

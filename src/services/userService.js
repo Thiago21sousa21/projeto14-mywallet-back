@@ -1,5 +1,5 @@
 import {errorList} from '../error/errorList.js'
-import {userRepository} from '../repositories'
+import {userRepository} from '../repositories/index.js'
 
 async function createRegistration(signupData){
     const {name, email, password} = signupData;

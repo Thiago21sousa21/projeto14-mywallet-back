@@ -1,4 +1,4 @@
-import {userService} from '../services'
+import {userService} from '../services/index.js'
 import httpStatus from 'http-status';
 
 export async function createRegistration(req, res){
