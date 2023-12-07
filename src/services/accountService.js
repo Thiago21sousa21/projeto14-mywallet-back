@@ -5,15 +5,18 @@ import { accountRepository, userRepository } from '../repositories/index.js'
 export async function newTransaction(transactionData) {
     const { typeTransaction, value, description, userId } = transactionData;
     let newBalance;
-
+    
     const account = await accountRepository.getAccountUserById(userId)
+    if(!account) throw errorList.internal();
+
     if (typeTransaction === 'entrada') {
         newBalance = Number(account.balance) + Number(value);
     } else if (typeTransaction === 'saida') {
         newBalance = Number(account.balance) - Number(value);
     }
 
-    await accountRepository.newTransaction({ userId, newBalance, transactions: account.transactions, value, description, typeTransaction })
+    const result = await accountRepository.newTransaction({ userId, newBalance, transactions: account.transactions, value, description, typeTransaction })
+    if(!result.acknowledged)throw errorList.internal();
 }
 
 export async function historicTransactions(userId) {

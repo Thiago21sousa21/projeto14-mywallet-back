@@ -1,12 +1,12 @@
 import { db } from "../database/databaseConnection.js";
 
 async function getAccountUserById (userId){
-    return account = await db.collection('account').findOne({userId});
+    return await db.collection('account').findOne({userId});
 }
 
 async function newTransaction (data){
     const {userId, newBalance, transactions, description, value, typeTransaction} = data;
-    await db.collection('account').updateOne({userId}, { 
+    return await db.collection('account').updateOne({userId}, { 
         $set: { 
             balance: newBalance,
             transactions: [...transactions, {
