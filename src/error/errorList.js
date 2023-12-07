@@ -24,7 +24,14 @@ import httpStatus from "http-status";
         }
     }
 
-  
+    function unauthorized(item = 'item'){
+        return {
+            name: 'unauthorized', 
+            message:`${item} unauthorized` , 
+            status: httpStatus.UNAUTHORIZED
+        }
+        
+    }
    
     function internal(){
         return {
@@ -38,5 +45,6 @@ export const errorList = {
     conflict,
     notFound,
     schema,
-    internal
+    internal,
+    unauthorized
 }
