@@ -1,5 +1,6 @@
 import {errorList} from '../error/errorList.js'
 import {userRepository} from '../repositories/index.js'
+import bcrypt from 'bcrypt'
 
 async function createRegistration(signupData){
     const {name, email, password} = signupData;
@@ -8,9 +9,12 @@ async function createRegistration(signupData){
     if(user)throw errorList.conflict('email')
 
     const hash =  bcrypt.hashSync(password, 10);
-    await userRepository.createUser({name, email, password: hash});
 
-    const recentUser = await userRepository.getUserByEmail({email});
+    const result = await userRepository.createUser({name, email, password: hash});
+    if(!result.acknowledged)throw errorList.internal();
+
+    const recentUser = await userRepository.getUserByEmail(email);
+    if(!recentUser)throw errorList.internal();
     await userRepository.createUserAccount(recentUser._id);
 }
 

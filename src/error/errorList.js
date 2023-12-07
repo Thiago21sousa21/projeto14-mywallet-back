@@ -1,9 +1,9 @@
 import httpStatus from "http-status";
 
-    function conflict(){
+    function conflict(item='item'){
         return {
             name: 'conflict',
-            message:'conflict! this item already exists',
+            message:`conflict! this ${item} already exists`,
             status: httpStatus.CONFLICT
         }
     }

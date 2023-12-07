@@ -12,7 +12,8 @@ async function getUserById(_id){
 }
 
 async function createUser(dataToCreation){
-    await db.collection('users').insertOne(dataToCreation);
+   const user = await db.collection('users').insertOne(dataToCreation);
+   return user
 }
 
 async function createUserAccount(userId){
