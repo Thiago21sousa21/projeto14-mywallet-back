@@ -22,7 +22,7 @@ export async function newTransaction(transactionData) {
 export async function historicTransactions(userId) {
     const account = await accountRepository.getAccountUserById(userId)
     const user = await userRepository.getUserById(userId)
-
+    if(!account || !user) throw errorList.internal();
     return {
         balance: account.balance,
         transactions: account.transactions.reverse(),

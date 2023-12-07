@@ -10,7 +10,7 @@ export async function newTransaction(req, res) {
 }
 
 export async function historicTransactions(req, res) {
-    const { userId } = res.locals.dataUser
+    const { userId } = res.locals.dataUser;
 
     const result = await accountService.historicTransactions(userId)
     return res.send(result)
