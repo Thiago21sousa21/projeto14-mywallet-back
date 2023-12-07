@@ -1,21 +1,19 @@
 import {errorList} from '../error/errorList.js'
 import {userRepository} from '../repositories/index.js'
 import bcrypt from 'bcrypt'
+import {v4 as uuid} from 'uuid'
 
 async function createRegistration(signupData){
     const {name, email, password} = signupData;
-
     const user = await userRepository.getUserByEmail(email)
-    if(user)throw errorList.conflict('email')
-
+    if(!user)throw errorList.conflict('email');
     const hash =  bcrypt.hashSync(password, 10);
-
     const result = await userRepository.createUser({name, email, password: hash});
     if(!result.acknowledged)throw errorList.internal();
-
     const recentUser = await userRepository.getUserByEmail(email);
     if(!recentUser)throw errorList.internal();
-    await userRepository.createUserAccount(recentUser._id);
+    const createAccount = await userRepository.createUserAccount(recentUser._id);
+    if(!createAccount.acknowledged)throw errorList.internal();
 }
 
 async function signin(signinData){

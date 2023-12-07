@@ -17,7 +17,7 @@ async function createUser(dataToCreation){
 }
 
 async function createUserAccount(userId){
-    await db.collection('account').insertOne({
+    return await db.collection('account').insertOne({
         userId,
         balance: 0,
         transactions: []
