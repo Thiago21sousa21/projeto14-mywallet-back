@@ -1,12 +1,7 @@
-import httpStatus from 'http-status'
 import { errorList } from '../error/errorList.js'
 import { accountRepository, userRepository } from "../repositories/index.js"
 
 export async function newTransaction(transactionData) {
-
-
-
-
     
     const { typeTransaction, value, description, userId } = transactionData;
     let newBalance;
