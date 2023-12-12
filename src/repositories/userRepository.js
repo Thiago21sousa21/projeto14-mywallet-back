@@ -3,7 +3,6 @@ import { db } from "../database/databaseConnection.js";
 
 async function getUserByEmail(email) {
     const user = await db.collection('users').findOne({ email });
-    console.log(user)
     return user;
 }
 
